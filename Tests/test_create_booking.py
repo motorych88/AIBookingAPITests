@@ -3,9 +3,9 @@ import allure
 import requests
 
 
-@allure.feature('Тесты на создание отеля')
+@allure.feature('Тесты на создание бронирования отеля')
 class TestsCreateBookings:
-    @allure.story('Создание отеля')
+    @allure.story('Создание бронирования')
     def test_create(self, api_client, generate_random_booking_data, booking_dates):
         booking_data = generate_random_booking_data
         booking_data["bookingdates"] = booking_dates
