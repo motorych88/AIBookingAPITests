@@ -1,6 +1,5 @@
-import pytest
 import allure
-import requests
+from Core.models.checking import CheckStatusCode
 
 
 @allure.feature('Тест Ping')
@@ -9,4 +8,4 @@ class TestsPing:
     def test_ping(self, api_client):
         status_code = api_client.ping()
         with allure.step('Проверка статус кода'):
-            assert status_code == 201, f'Ожидаемый статус код 201, получили: {status_code}'
+            CheckStatusCode.check_201(status_code)
