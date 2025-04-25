@@ -9,7 +9,7 @@ from Core.models.checking import CheckStatusCode
 
 @allure.feature('Тесты на создание бронирования отеля')
 class TestsCreateBookings:
-    @allure.story('Создание бронирования')
+    @allure.title('Создание бронирования')
     def test_create(self, api_client, create_booking_static_payload):
         booking_data = create_booking_static_payload
         with allure.step('Отправка запроса на подключение'):
@@ -24,7 +24,7 @@ class TestsCreateBookings:
         with allure.step('Проверка полей ответа'):
             CheckResponseJson.check_booking_response_json(response_json, booking_data)
 
-    @allure.story('Создание бронирования с рандомным телом')
+    @allure.title('Создание бронирования с рандомным телом')
     def test_create_random(self, api_client, generate_random_booking_data, booking_dates, create_booking_static_payload):
         booking_data = generate_random_booking_data
         booking_data["bookingdates"] = booking_dates
@@ -40,7 +40,7 @@ class TestsCreateBookings:
         with allure.step('Проверка полей ответа'):
             CheckResponseJson.check_booking_response_json(response_json, booking_data)
 
-    @allure.story('Создание бронирования с пустыми значением "totalprice"')
+    @allure.title('Создание бронирования с пустыми значением "totalprice"')
     def test_create_booking_empty_data(self, api_client, create_booking_static_payload):
         booking_data = create_booking_static_payload
         booking_data["totalprice"] = None
@@ -51,7 +51,7 @@ class TestsCreateBookings:
         with allure.step('Проверка статус кода'):
             CheckStatusCode.check_500(response)
 
-    @allure.story('Создание бронирования с невалидным значением "firstname"')
+    @allure.title('Создание бронирования с невалидным значением "firstname"')
     def test_create_booking_invalid_data(self, api_client, create_booking_static_payload):
         booking_data = create_booking_static_payload
         booking_data["firstname"] = 111

@@ -30,7 +30,7 @@ class APIClient:
         return response
 
     def ping(self):
-        with allure.step('Ping Api client'):
+        with allure.step('Подключение (Api client)'):
             url = f'{self.base_url}/{Endpoints.PING_ENDPOINT.value}'
             response = self.session.get(url)
             response.raise_for_status()
@@ -73,7 +73,7 @@ class APIClient:
         return response
 
     def update_booking(self, booking_data, booking_id):
-        with allure.step('Update booking'):
+        with allure.step('Обновление отеля'):
             url = f'{self.base_url}/{Endpoints.BOOKING_ENDPOINT.value}/{booking_id}'
             response = self.session.put(url, auth=HTTPBasicAuth(Users.USERNAME.value, Users.PASSWORD.value),json=booking_data)
             response.raise_for_status()

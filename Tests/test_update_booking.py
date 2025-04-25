@@ -49,7 +49,7 @@ class TestsUpdateBookings:
         with allure.step('Проверка статус кода'):
             CheckStatusCode.check_405(response)
 
-    @allure.title('Попытка обновления бронирования без с пустым значением в теле')
+    @allure.title('Попытка обновления бронирования с пустым значением в "totalprice"')
     def test_update_empty(self, api_client, generate_random_booking_data, booking_dates, create_booking_static_payload):
         booking_data_create = create_booking_static_payload
         with allure.step('Отправка запроса на создание бронирования'):
@@ -68,7 +68,7 @@ class TestsUpdateBookings:
         with allure.step('Проверка статус кода'):
             CheckStatusCode.check_400(response)
 
-    @allure.title('Попытка обновления бронирования без с невалидным значением в теле')
+    @allure.title('Попытка обновления бронирования с невалидным значением в "firstname"')
     def test_update_invalid(self, api_client, generate_random_booking_data, booking_dates, create_booking_static_payload):
         booking_data_create = create_booking_static_payload
         with allure.step('Отправка запроса на создание бронирования'):
