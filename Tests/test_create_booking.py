@@ -1,6 +1,7 @@
 import allure
 import requests
-
+from Core.data.payload_data import Payload
+from Core.models.check_json import CheckResponseJson
 from Core.models.booking import BookingResponse
 from pydantic import ValidationError
 import pytest
@@ -11,17 +12,7 @@ from Core.models.checking import CheckStatusCode
 class TestsCreateBookings:
     @allure.story('Создание бронирования')
     def test_create(self, api_client):
-        booking_data = {
-            "firstname": "Jim",
-            "lastname": "Brown",
-            "totalprice": 111,
-            "depositpaid": False,
-            "bookingdates": {
-                "checkin": "2018-01-01",
-                "checkout": "2019-01-01"
-            },
-            "additionalneeds": "lunch"
-        }
+        booking_data = Payload.create_booking_payload()
         with allure.step('Отправка запроса на подключение'):
             response = api_client.create_booking(booking_data)
             response_json = response.json()
@@ -32,20 +23,7 @@ class TestsCreateBookings:
             except ValidationError as e:
                 raise ValidationError(f'Ответ не прошел валидацию {e}')
         with allure.step('Проверка полей ответа'):
-            assert response_json["booking"]["firstname"] == booking_data[
-                "firstname"], 'firstname запроса не совпадает с firstname ответа'
-            assert response_json["booking"]["lastname"] == booking_data[
-                "lastname"], 'lastname запроса не совпадает с lastname ответа'
-            assert response_json["booking"]["totalprice"] == booking_data[
-                "totalprice"], 'totalprice запроса не совпадает с totalprice ответа'
-            assert response_json["booking"]["depositpaid"] == booking_data[
-                "depositpaid"], 'depositpaid запроса не совпадает с depositpaid ответа'
-            assert response_json["booking"]["additionalneeds"] == booking_data[
-                "additionalneeds"], 'additionalneeds запроса не совпадает с additionalneeds ответа'
-            assert response_json["booking"]["bookingdates"]["checkin"] == booking_data["bookingdates"][
-                "checkin"], 'checkin запроса не совпадает с checkin ответа'
-            assert response_json["booking"]["bookingdates"]["checkout"] == booking_data["bookingdates"][
-                "checkout"], 'checkout запроса не совпадает с checkout ответа'
+            CheckResponseJson.check_booking_response_json(response_json, booking_data)
 
     @allure.story('Создание бронирования с рандомным телом')
     def test_create_random(self, api_client, generate_random_booking_data, booking_dates):
@@ -61,61 +39,26 @@ class TestsCreateBookings:
             except ValidationError as e:
                 raise ValidationError(f'Ответ не прошел валидацию {e}')
         with allure.step('Проверка полей ответа'):
-            assert response_json["booking"]["firstname"] == booking_data[
-                "firstname"], 'firstname запроса не совпадает с firstname ответа'
-            assert response_json["booking"]["lastname"] == booking_data[
-                "lastname"], 'lastname запроса не совпадает с lastname ответа'
-            assert response_json["booking"]["totalprice"] == booking_data[
-                "totalprice"], 'totalprice запроса не совпадает с totalprice ответа'
-            assert response_json["booking"]["depositpaid"] == booking_data[
-                "depositpaid"], 'depositpaid запроса не совпадает с depositpaid ответа'
-            assert response_json["booking"]["additionalneeds"] == booking_data[
-                "additionalneeds"], 'additionalneeds запроса не совпадает с additionalneeds ответа'
-            assert response_json["booking"]["bookingdates"]["checkin"] == booking_data["bookingdates"][
-                "checkin"], 'checkin запроса не совпадает с checkin ответа'
-            assert response_json["booking"]["bookingdates"]["checkout"] == booking_data["bookingdates"][
-                "checkout"], 'checkout запроса не совпадает с checkout ответа'
+            CheckResponseJson.check_booking_response_json(response_json, booking_data)
 
     @allure.story('Создание бронирования с пустыми значением "totalprice"')
     def test_create_booking_invalid_data(self, api_client):
-        booking_data = {
-            "firstname": "Jim",
-            "lastname": "Brown",
-            "totalprice": None,
-            "depositpaid": False,
-            "bookingdates": {
-                "checkin": "2018-01-01",
-                "checkout": "2019-01-01"
-            },
-            "additionalneeds": "lunch"
-        }
+        booking_data = Payload.create_booking_payload()
+        booking_data["totalprice"] = None
         with allure.step('Отправка запроса на подключение'):
-            try:
-                response = api_client.create_booking(booking_data)
-                pytest.fail("Ожидалась 500 ошибка, но запрос завершился успешно")
-            except requests.exceptions.HTTPError as e:
-                response = e.response
+            with pytest.raises(requests.exceptions.HTTPError) as e:
+                api_client.create_booking(booking_data)
+            response = e.value.response
         with allure.step('Проверка статус кода'):
             CheckStatusCode.check_500(response)
 
     @allure.story('Создание бронирования с невалидным значением "firstname"')
     def test_create_booking_invalid_data(self, api_client):
-        booking_data = {
-            "firstname": 111,
-            "lastname": "Brown",
-            "totalprice": 111,
-            "depositpaid": False,
-            "bookingdates": {
-                "checkin": "2018-01-01",
-                "checkout": "2019-01-01"
-            },
-            "additionalneeds": "lunch"
-        }
+        booking_data = Payload.create_booking_payload()
+        booking_data["firstname"] = 111
         with allure.step('Отправка запроса на подключение'):
-            try:
-                response = api_client.create_booking(booking_data)
-                pytest.fail("Ожидалась 500 ошибка, но запрос завершился успешно")
-            except requests.exceptions.HTTPError as e:
-                response = e.response
+            with pytest.raises(requests.exceptions.HTTPError) as e:
+                api_client.create_booking(booking_data)
+            response = e.value.response
         with allure.step('Проверка статус кода'):
             CheckStatusCode.check_500(response)

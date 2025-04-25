@@ -52,7 +52,7 @@ class APIClient:
             response.raise_for_status()
         return response
 
-    def delete_booking(self, booking_id='1'):
+    def delete_booking(self, booking_id):
         with allure.step('Удаление отеля по ID'):
             url = f'{self.base_url}/{Endpoints.BOOKING_ENDPOINT}/{booking_id}'
             response = self.session.delete(url, auth=HTTPBasicAuth(Users.USERNAME.value, Users.PASSWORD.value))
@@ -72,10 +72,10 @@ class APIClient:
             response = self.session.post(url, params)
         return response
 
-    def update_booking(self, update_body, booking_id='1'):
+    def update_booking(self, booking_data, booking_id):
         with allure.step('Update booking'):
             url = f'{self.base_url}/{Endpoints.BOOKING_ENDPOINT.value}/{booking_id}'
-            response = self.session.put(url, auth=HTTPBasicAuth(Users.USERNAME.value, Users.PASSWORD.value),json=update_body)
+            response = self.session.put(url, auth=HTTPBasicAuth(Users.USERNAME.value, Users.PASSWORD.value),json=booking_data)
             response.raise_for_status()
         return response
 
