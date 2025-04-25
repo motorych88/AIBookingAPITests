@@ -9,7 +9,7 @@ from Core.models.checking import CheckStatusCode
 
 @allure.feature('Тесты на Обновление бронирования отеля')
 class TestsUpdateBookings:
-    @allure.story('Обновление бронирования')
+    @allure.title('Обновление бронирования')
     def test_update(self, api_client, generate_random_booking_data, booking_dates, create_booking_static_payload):
         booking_data_create = create_booking_static_payload
         with allure.step('Отправка запроса на создание бронирования'):
@@ -32,7 +32,7 @@ class TestsUpdateBookings:
         with allure.step('Проверка полей ответа'):
             CheckResponseJson.check_update_booking_response_json(response_json, booking_data)
 
-    @allure.story('Попытка обновления бронирования без параметра ID')
+    @allure.title('Попытка обновления бронирования без параметра ID')
     def test_update_no_id(self, api_client, generate_random_booking_data, booking_dates, create_booking_static_payload):
         booking_data_create = create_booking_static_payload
         with allure.step('Отправка запроса на создание бронирования'):
@@ -49,7 +49,7 @@ class TestsUpdateBookings:
         with allure.step('Проверка статус кода'):
             CheckStatusCode.check_405(response)
 
-    @allure.story('Попытка обновления бронирования без с пустым значением в теле')
+    @allure.title('Попытка обновления бронирования без с пустым значением в теле')
     def test_update_empty(self, api_client, generate_random_booking_data, booking_dates, create_booking_static_payload):
         booking_data_create = create_booking_static_payload
         with allure.step('Отправка запроса на создание бронирования'):
@@ -68,7 +68,7 @@ class TestsUpdateBookings:
         with allure.step('Проверка статус кода'):
             CheckStatusCode.check_400(response)
 
-    @allure.story('Попытка обновления бронирования без с невалидным значением в теле')
+    @allure.title('Попытка обновления бронирования без с невалидным значением в теле')
     def test_update_invalid(self, api_client, generate_random_booking_data, booking_dates, create_booking_static_payload):
         booking_data_create = create_booking_static_payload
         with allure.step('Отправка запроса на создание бронирования'):
