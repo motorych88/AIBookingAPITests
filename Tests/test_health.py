@@ -4,7 +4,7 @@ from Core.models.checking import CheckStatusCode
 
 @allure.feature('Тест Ping')
 class TestsPing:
-    @allure.story('Проверка подключения')
+    @allure.title('Проверка подключения')
     def test_ping(self, api_client):
         status_code = api_client.ping()
         with allure.step('Проверка статус кода'):
