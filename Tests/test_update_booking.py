@@ -1,19 +1,17 @@
 import allure
 import requests
-from Core.data.payload_data import Payload
 from Core.models.booking import Booking
 from pydantic import ValidationError
 import pytest
-
 from Core.models.check_json import CheckResponseJson
 from Core.models.checking import CheckStatusCode
 
 
-@allure.feature('Тесты на создание бронирования отеля')
-class TestsCreateBookings:
+@allure.feature('Тесты на Обновление бронирования отеля')
+class TestsUpdateBookings:
     @allure.story('Обновление бронирования')
-    def test_update(self, api_client, generate_random_booking_data, booking_dates):
-        booking_data_create = Payload.create_booking_payload()
+    def test_update(self, api_client, generate_random_booking_data, booking_dates, create_booking_static_payload):
+        booking_data_create = create_booking_static_payload
         with allure.step('Отправка запроса на создание бронирования'):
             response_create = api_client.create_booking(booking_data_create)
             response_json_create =  response_create.json()
@@ -35,8 +33,8 @@ class TestsCreateBookings:
             CheckResponseJson.check_update_booking_response_json(response_json, booking_data)
 
     @allure.story('Попытка обновления бронирования без параметра ID')
-    def test_update(self, api_client, generate_random_booking_data, booking_dates):
-        booking_data_create = Payload.create_booking_payload()
+    def test_update_no_id(self, api_client, generate_random_booking_data, booking_dates, create_booking_static_payload):
+        booking_data_create = create_booking_static_payload
         with allure.step('Отправка запроса на создание бронирования'):
             response_create = api_client.create_booking(booking_data_create)
             booking_id = None
@@ -52,8 +50,8 @@ class TestsCreateBookings:
             CheckStatusCode.check_405(response)
 
     @allure.story('Попытка обновления бронирования без с пустым значением в теле')
-    def test_update(self, api_client, generate_random_booking_data, booking_dates):
-        booking_data_create = Payload.create_booking_payload()
+    def test_update_empty(self, api_client, generate_random_booking_data, booking_dates, create_booking_static_payload):
+        booking_data_create = create_booking_static_payload
         with allure.step('Отправка запроса на создание бронирования'):
             response_create = api_client.create_booking(booking_data_create)
             response_json_create = response_create.json()
@@ -71,8 +69,8 @@ class TestsCreateBookings:
             CheckStatusCode.check_400(response)
 
     @allure.story('Попытка обновления бронирования без с невалидным значением в теле')
-    def test_update(self, api_client, generate_random_booking_data, booking_dates):
-        booking_data_create = Payload.create_booking_payload()
+    def test_update_invalid(self, api_client, generate_random_booking_data, booking_dates, create_booking_static_payload):
+        booking_data_create = create_booking_static_payload
         with allure.step('Отправка запроса на создание бронирования'):
             response_create = api_client.create_booking(booking_data_create)
             response_json_create = response_create.json()

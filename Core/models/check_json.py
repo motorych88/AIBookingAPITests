@@ -3,7 +3,7 @@ import allure
 
 class CheckResponseJson:
     @staticmethod
-    @allure.step('Проверка полей ответа создания бронирования')
+    @allure.step('Проверка соответствия полей ответа создания бронирования')
     def check_booking_response_json(response_json, booking_data):
             assert response_json["booking"]["firstname"] == booking_data[
                 "firstname"], 'firstname запроса не совпадает с firstname ответа'
@@ -21,7 +21,7 @@ class CheckResponseJson:
                 "checkout"], 'checkout запроса не совпадает с checkout ответа'
 
     @staticmethod
-    @allure.step('Проверка полей ответа редактирования бронирования')
+    @allure.step('Проверка соответствия полей ответа редактирования бронирования')
     def check_update_booking_response_json(response_json, booking_data):
         assert response_json["firstname"] == booking_data["firstname"], 'firstname запроса не совпадает с firstname ответа'
         assert response_json["lastname"] == booking_data["lastname"], 'lastname запроса не совпадает с lastname ответа'

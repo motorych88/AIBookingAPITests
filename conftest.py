@@ -22,6 +22,7 @@ def booking_dates():
         "checkout": checkout_date.strftime('%Y-%m-%d')
     }
 
+
 @pytest.fixture()
 def generate_random_booking_data():
     faker = Faker()
@@ -40,3 +41,18 @@ def generate_random_booking_data():
     }
 
     return data
+
+
+@pytest.fixture()
+def create_booking_static_payload():
+    return {
+        "firstname": "Jim",
+        "lastname": "Brown",
+        "totalprice": 111,
+        "depositpaid": False,
+        "bookingdates": {
+            "checkin": "2018-01-01",
+            "checkout": "2019-01-01"
+        },
+        "additionalneeds": "lunch"
+    }
