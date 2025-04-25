@@ -9,12 +9,13 @@ from Core.models.checking import CheckStatusCode
 
 @allure.feature('Тесты на Обновление бронирования отеля')
 class TestsUpdateBookings:
+
     @allure.title('Обновление бронирования')
     def test_update(self, api_client, generate_random_booking_data, booking_dates, create_booking_static_payload):
         booking_data_create = create_booking_static_payload
         with allure.step('Отправка запроса на создание бронирования'):
             response_create = api_client.create_booking(booking_data_create)
-            response_json_create =  response_create.json()
+            response_json_create = response_create.json()
             booking_id = response_json_create["bookingid"]
         with allure.step('Проверка статус кода'):
             CheckStatusCode.check_200(response_create)
@@ -69,7 +70,8 @@ class TestsUpdateBookings:
             CheckStatusCode.check_400(response)
 
     @allure.title('Попытка обновления бронирования с невалидным значением в "firstname"')
-    def test_update_invalid(self, api_client, generate_random_booking_data, booking_dates, create_booking_static_payload):
+    def test_update_invalid(self, api_client, generate_random_booking_data, booking_dates,
+                            create_booking_static_payload):
         booking_data_create = create_booking_static_payload
         with allure.step('Отправка запроса на создание бронирования'):
             response_create = api_client.create_booking(booking_data_create)

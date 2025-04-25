@@ -26,7 +26,8 @@ class TestsCreateBookings:
             CheckResponseJson.check_booking_response_json(response_json, booking_data)
 
     @allure.title('Создание бронирования с рандомным телом')
-    def test_create_random(self, api_client, generate_random_booking_data, booking_dates, create_booking_static_payload):
+    def test_create_random(self, api_client, generate_random_booking_data, booking_dates,
+                           create_booking_static_payload):
         booking_data = generate_random_booking_data
         booking_data["bookingdates"] = booking_dates
         with allure.step('Отправка запроса на подключение'):
