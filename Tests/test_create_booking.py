@@ -9,6 +9,7 @@ from Core.models.checking import CheckStatusCode
 
 @allure.feature('Тесты на создание бронирования отеля')
 class TestsCreateBookings:
+
     @allure.title('Создание бронирования')
     def test_create(self, api_client, create_booking_static_payload):
         booking_data = create_booking_static_payload
